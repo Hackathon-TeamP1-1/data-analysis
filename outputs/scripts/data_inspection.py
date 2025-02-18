@@ -56,7 +56,7 @@
 # 
 # - What features should be included in the dashboard to allow users to explore data dynamically?
 
-# In[50]:
+# In[282]:
 
 
 # the goal is the analyze the data and find the best way to predict the Strategy for AI-Powered Renewable Energy Consumption & Forecasting Dashboard
@@ -67,11 +67,10 @@ import seaborn as sns
 import plotly.express as px
 
 
-
 # ## Datasets Loading
 # ### 1. Our World in Data (OWID) - Global Energy Dataset
 
-# In[51]:
+# In[283]:
 
 
 # loading the datasets
@@ -85,13 +84,13 @@ print(
 )
 
 
-# In[52]:
+# In[284]:
 
 
 owid_data.head()
 
 
-# In[78]:
+# In[285]:
 
 
 owid_data.sample(10)
@@ -99,7 +98,7 @@ owid_data.sample(10)
 
 # ### 2. Global Energy Consumption & Renewable Generation || Kaggle
 
-# In[53]:
+# In[286]:
 
 
 # global energy data
@@ -129,43 +128,43 @@ print(
 )
 
 
-# In[54]:
+# In[287]:
 
 
 continent_consumption.head()
 
 
-# In[55]:
+# In[288]:
 
 
 country_consumption.head()
 
 
-# In[56]:
+# In[289]:
 
 
 country_consumption.head()
 
 
-# In[57]:
+# In[290]:
 
 
 non_renewable_total_power_generation.head()
 
 
-# In[58]:
+# In[291]:
 
 
 renewable_power_generation_97_17.head()
 
 
-# In[59]:
+# In[292]:
 
 
 renewable_total_power_generation.head()
 
 
-# In[60]:
+# In[293]:
 
 
 top_20_countries_power_generatoin.head()
@@ -173,7 +172,7 @@ top_20_countries_power_generatoin.head()
 
 # ### Energy Generation & Consumption (from multiple sources)
 
-# In[61]:
+# In[294]:
 
 
 electricity_consumption_statistics = pd.read_csv('data/IRR_cleaned/ELECSTAT_CLEANED.csv')
@@ -189,25 +188,25 @@ print(
 )
 
 
-# In[62]:
+# In[295]:
 
 
 electricity_consumption_statistics.head()
 
 
-# In[63]:
+# In[296]:
 
 
 heat_generations.head()
 
 
-# In[64]:
+# In[297]:
 
 
 share_of_renewables.head()
 
 
-# In[65]:
+# In[298]:
 
 
 investment_in_energy_infrastructure.head()
@@ -225,35 +224,226 @@ investment_in_energy_infrastructure.head()
 # 
 # - **owid-energy-codebook.csv**: A codebook detailing column descriptions and data sources for the OWID dataset.
 
-# In[66]:
+# In[299]:
 
 
 owid_data.columns
 
 
-# In[67]:
+# In[300]:
 
 
 owid_bookcode.columns
 
 
-# In[77]:
+# In[301]:
 
 
 # save the output on a text file
-owid_data.describe().to_csv('outputs/exploring_outputs/owid_data_describe.csv')
+owid_data.describe().to_csv('outputs/exploring_outputs/owid/owid_data_describe.csv')
+owid_data.describe()
 
 
 # The bookcode provides metadata about the cols, we can benefit from that by visually navigate through the csv. 
 # 
 # After Reviewing the bookcode CSV, I can benefit from the "column" and the "units" columns through my programatically exploring into this dataset.
 
-# In[73]:
+# In[302]:
 
 
 owid_bookcode = owid_bookcode[['column', 'unit']]
 owid_bookcode.dropna(inplace=True)
 owid_bookcode.head()
+
+
+# In[303]:
+
+
+owid_info_df = pd.DataFrame(owid_data.dtypes, columns=['data_type']).reset_index()
+owid_info_df.to_csv('outputs/exploring_outputs/owid/owid_info.csv')
+
+# owid_info_df['missing_values'] = owid_data.isnull().sum()
+
+
+# In[304]:
+
+
+owid_data.value_counts().to_csv('outputs/exploring_outputs/owid/owid_data_value_counts.csv')   
+
+
+# In[305]:
+
+
+missing_df = owid_data.isnull().sum().reset_index()
+missing_df.columns = ['column', 'missing_values']
+missing_df['total_values'] = owid_data.shape[0]
+missing_df['missing_percentage'] = missing_df['missing_values'] / missing_df['total_values'] * 100
+missing_df.sort_values('missing_percentage', ascending=False, inplace=True)
+missing_df.to_csv('outputs/exploring_outputs/owid/owid_data_missing.csv')
+
+
+# In[306]:
+
+
+def basic_info(df, name):
+    print(f"\n{name} Dataset Info:")
+    print(df.info())
+    print("\nMissing values:")
+    print(df.isnull().sum())
+    print("\nSummary Statistics:")
+    print(df.describe(include='all'))
+
+
+# In[307]:
+
+
+basic_info(owid_data, "Energy Data")
+
+
+# In[308]:
+
+
+display(owid_data.head())
+
+
+# In[309]:
+
+
+def plot_energy_trends(df, energy_source):
+    """Plot trends in energy production/consumption over time."""
+    plt.figure(figsize=(12, 6))
+    sns.lineplot(data=df, x="year", y=energy_source, hue="country", legend=False)
+    plt.title(f"Trends in {energy_source}")
+    plt.xlabel("Year")
+    plt.ylabel(energy_source)
+    plt.savefig(f"outputs/exploring_outputs/owid/figures/{energy_source}_trends.png")
+
+def plot_energy_correlation(df):
+    """Plot correlation matrix of energy sources."""
+    plt.figure(figsize=(12, 6))
+    sns.heatmap(df.corr(), annot=True, cmap="coolwarm", fmt=".2f")
+    plt.title("Correlation Matrix of Energy Sources")
+    plt.show()
+    plt.savefig(f"outputs/exploring_outputs/owid/figures/energy_correlation.png")
+
+
+def plot_energy_sources(df):
+    """Plot energy sources."""
+    plt.figure(figsize=(12, 6))
+    sns.barplot(data=df, x="value", y="source", palette="viridis")
+    plt.title("Energy Sources")
+    plt.xlabel("Value")
+    plt.ylabel("Source")
+    plt.show()
+    plt.savefig(f"outputs/exploring_outputs/owid/figures/energy_sources.png")
+
+
+def plot_energy_sources_by_country(df, country):
+    """Plot energy sources by country."""
+    plt.figure(figsize=(12, 6))
+    sns.barplot(
+        data=df[df["country"] == country], x="value", y="source", palette="viridis"
+    )
+    plt.title(f"Energy Sources in {country}")
+    plt.xlabel("Value")
+    plt.ylabel("Source")
+    plt.show()
+    plt.savefig(f"outputs/exploring_outputs/owid/figures/{country}_energy_sources.png")
+
+
+def plot_energy_sources_by_year(df, year):
+    """Plot energy sources by year."""
+    plt.figure(figsize=(12, 6))
+    sns.barplot(data=df[df["year"] == year], x="value", y="source", palette="viridis")
+    plt.title(f"Energy Sources in {year}")
+    plt.xlabel("Value")
+    plt.ylabel("Source")
+    plt.show()
+    plt.savefig(f"outputs/exploring_outputs/owid/figures/{year}_energy_sources.png")
+
+
+def plot_energy_sources_by_continent(df, continent):
+    """Plot energy sources by continent."""
+    plt.figure(figsize=(12, 6))
+    sns.barplot(
+        data=df[df["continent"] == continent], x="value", y="source", palette="viridis"
+    )
+    plt.title(f"Energy Sources in {continent}")
+    plt.xlabel("Value")
+    plt.ylabel("Source")
+    plt.show()
+    plt.savefig(
+        f"outputs/exploring_outputs/owid/figures/{continent}_energy_sources.png"
+    )
+
+
+def plot_energy_sources_by_region(df, region):
+    """Plot energy sources by region."""
+    plt.figure(figsize=(12, 6))
+    sns.barplot(
+        data=df[df["region"] == region], x="value", y="source", palette="viridis"
+    )
+    plt.title(f"Energy Sources in {region}")
+    plt.xlabel("Value")
+    plt.ylabel("Source")
+    plt.show()
+    plt.savefig(f"outputs/exploring_outputs/owid/figures/{region}_energy_sources.png")
+
+
+def plot_energy_sources_by_income_group(df, income_group):
+    """Plot energy sources by income group."""
+    plt.figure(figsize=(12, 6))
+    sns.barplot(
+        data=df[df["income_group"] == income_group],
+        x="value",
+        y="source",
+        palette="viridis",
+    )
+    plt.title(f"Energy Sources in {income_group}")
+    plt.xlabel("Value")
+    plt.ylabel("Source")
+    plt.show()
+    plt.savefig(
+        f"outputs/exploring_outputs/owid/figures/{income_group}_energy_sources.png"
+    )
+
+
+# In[310]:
+
+
+energy_columns = [col for col in owid_data.columns if any(x in col for x in ['energy', 'electricity', 'consumption', 'production'])]
+print("Available energy-related columns:")
+print(energy_columns)
+
+
+# In[311]:
+
+
+for col in energy_columns:
+    if owid_data[col].dtype in ['float64', 'int64']:
+        plot_energy_trends(owid_data, col)
+        
+
+
+# In[312]:
+
+
+def plot_energy_distribution(df, energy_source):
+    """Plot distribution of energy production/consumption."""
+    plt.figure(figsize=(12, 6))
+    sns.histplot(df[energy_source], bins=30, kde=True)
+    plt.title(f"Distribution of {energy_source}")
+    plt.xlabel(energy_source)
+    plt.ylabel("Frequency")
+    plt.savefig(
+        f"outputs/exploring_outputs/owid/figures/{energy_source}_distribution.png"
+    )
+
+
+# In[313]:
+
+
+plot_energy_distribution(owid_data, "renewables_consumption")
 
 
 # ## 2. Dataset Group 2: Global Energy Consumption & Renewable Generation
