@@ -1,0 +1,350 @@
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+CLRSKY_SFC_SW_DWN     CERES SYN1deg Clear Sky Surface Shortwave Downward Irradiance (kW-hr/m^2/day) 
+-END HEADER-
+
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+ALLSKY_SFC_SW_DNI     CERES SYN1deg All Sky Surface Shortwave Downward Direct Normal Irradiance (kW-hr/m^2/day) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+ALLSKY_SFC_SW_DIFF     CERES SYN1deg All Sky Surface Shortwave Diffuse Irradiance (kW-hr/m^2/day) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+ALLSKY_KT     CERES SYN1deg All Sky Insolation Clearness Index (dimensionless) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+ALLSKY_SFC_LW_DWN     CERES SYN1deg All Sky Surface Longwave Downward Irradiance (kW-hr/m^2/day) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+ALLSKY_SFC_PAR_TOT     CERES SYN1deg All Sky Surface Total PAR (kW-hr/m^2/day) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+CLRSKY_SFC_PAR_TOT     CERES SYN1deg Clear Sky Surface Total PAR (kW-hr/m^2/day) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+ALLSKY_SFC_UVA     CERES SYN1deg All Sky Surface UVA Irradiance (kW-hr/m^2/day) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+ALLSKY_SFC_UVB     CERES SYN1deg All Sky Surface UVB Irradiance (kW-hr/m^2/day) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+ALLSKY_SFC_UV_INDEX     CERES SYN1deg All Sky Surface UV Index (W m-2 x 40) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+ALLSKY_SFC_SW_DWN     CERES SYN1deg All Sky Surface Shortwave Downward Irradiance (kW-hr/m^2/day) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+CLRSKY_SFC_SW_DWN     CERES SYN1deg Clear Sky Surface Shortwave Downward Irradiance (kW-hr/m^2/day) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+WS2M     MERRA-2 Wind Speed at 2 Meters (m/s) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+T2M     MERRA-2 Temperature at 2 Meters (C) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+T2MDEW     MERRA-2 Dew/Frost Point at 2 Meters (C) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+T2MWET     MERRA-2 Wet Bulb Temperature at 2 Meters (C) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+TS     MERRA-2 Earth Skin Temperature (C) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+T2M_RANGE     MERRA-2 Temperature at 2 Meters Range (C) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+T2M_MAX     MERRA-2 Temperature at 2 Meters Maximum (C) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+T2M_MIN     MERRA-2 Temperature at 2 Meters Minimum (C) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+QV2M     MERRA-2 Specific Humidity at 2 Meters (g/kg) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+RH2M     MERRA-2 Relative Humidity at 2 Meters (%) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+PRECTOTCORR     MERRA-2 Precipitation Corrected (mm/day) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+PS     MERRA-2 Surface Pressure (kPa) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+WS10M     MERRA-2 Wind Speed at 10 Meters (m/s) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+WS10M_MAX     MERRA-2 Wind Speed at 10 Meters Maximum (m/s) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+WS10M_MIN     MERRA-2 Wind Speed at 10 Meters Minimum (m/s) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+WS10M_RANGE     MERRA-2 Wind Speed at 10 Meters Range (m/s) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+WD10M     MERRA-2 Wind Direction at 10 Meters (Degrees) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+WS50M     MERRA-2 Wind Speed at 50 Meters (m/s) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+WS50M_MAX     MERRA-2 Wind Speed at 50 Meters Maximum (m/s) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+WS50M_MIN     MERRA-2 Wind Speed at 50 Meters Minimum (m/s) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+WS50M_RANGE     MERRA-2 Wind Speed at 50 Meters Range (m/s) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+WD50M     MERRA-2 Wind Direction at 50 Meters (Degrees) 
+-END HEADER-
+
+-BEGIN HEADER-
+NASA/POWER Source Native Resolution Daily Data 
+Dates (month/day/year): 01/01/2025 through 02/17/2025 in LST
+Location: Regional 
+elevation from MERRA-2: Average for 0.5 x 0.625 degree lat/lon region = na meters
+The value for missing source data that cannot be computed or is outside of the sources availability range: -999 
+parameter(s): 
+ALLSKY_SFC_SW_DWN     CERES SYN1deg All Sky Surface Shortwave Downward Irradiance (kW-hr/m^2/day) 
+-END HEADER-

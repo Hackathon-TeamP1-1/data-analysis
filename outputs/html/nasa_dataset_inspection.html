@@ -7514,11 +7514,13 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [63]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [181]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">zscore</span>
 </pre></div>
 </div>
 </div>
@@ -7529,7 +7531,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [64]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [182]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">base_path</span> <span class="o">=</span> <span class="s1">'data/nasa'</span>
@@ -7545,7 +7547,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [65]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [183]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">all_subdirs</span> <span class="o">=</span> <span class="p">[</span>
@@ -7569,7 +7571,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [66]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [184]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">merged_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base_path</span><span class="p">,</span> <span class="s1">'merged'</span><span class="p">)</span>
@@ -7584,7 +7586,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [67]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [185]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">var_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">36</span><span class="p">):</span>
@@ -7667,7 +7669,7 @@ No files found for variable (35) in the given year range.
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [68]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [186]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">merge_all_variables</span><span class="p">(</span>
@@ -7688,14 +7690,12 @@ No files found for variable (35) in the given year range.
 
     <span class="n">key_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"LAT"</span><span class="p">,</span> <span class="s2">"LON"</span><span class="p">,</span> <span class="s2">"YEAR"</span><span class="p">,</span> <span class="s2">"MO"</span><span class="p">,</span> <span class="s2">"DY"</span><span class="p">]</span>
 
-    <span class="c1"># List all "POWER_Regional_Daily_Merged" CSV files in the directory</span>
     <span class="n">all_files</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">f</span>
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">merged_dir</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"POWER_Regional_Daily_Merged"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">".csv"</span><span class="p">)</span>
     <span class="p">]</span>
 
-    <span class="c1"># Sort file names just for consistency (optional)</span>
     <span class="n">all_files</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
 
     <span class="n">merged_df</span> <span class="o">=</span> <span class="kc">None</span>
@@ -7703,33 +7703,28 @@ No files found for variable (35) in the given year range.
     <span class="k">for</span> <span class="n">csv_file</span> <span class="ow">in</span> <span class="n">all_files</span><span class="p">:</span>
         <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">merged_dir</span><span class="p">,</span> <span class="n">csv_file</span><span class="p">)</span>
 
-        <span class="c1"># Read the CSV</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
 
-        <span class="c1"># Identify the variable column(s)</span>
         <span class="n">var_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">key_cols</span><span class="p">]</span>
 
-        <span class="c1"># If there's exactly 1 variable column, we proceed</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">var_cols</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">var_name</span> <span class="o">=</span> <span class="n">var_cols</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># e.g. "CLRSKY_SFC_SW_DWN" or "ALLSKY_SFC_SW_DNI"</span>
+            <span class="n">var_name</span> <span class="o">=</span> <span class="n">var_cols</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
             <span class="k">if</span> <span class="n">merged_df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="c1"># First file becomes the base DataFrame</span>
+
                 <span class="n">merged_df</span> <span class="o">=</span> <span class="n">df</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># Outer merge so we keep all rows from both DataFrames</span>
+
                 <span class="n">merged_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">merged_df</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="n">key_cols</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">"outer"</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">"Warning: </span><span class="si">{</span><span class="n">csv_file</span><span class="si">}</span><span class="s2"> has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">var_cols</span><span class="p">)</span><span class="si">}</span><span class="s2"> variable columns; skipping."</span>
             <span class="p">)</span>
 
-    <span class="c1"># Final sorting by the key columns</span>
     <span class="k">if</span> <span class="n">merged_df</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">merged_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="n">key_cols</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">merged_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="c1"># Write to CSV</span>
         <span class="n">output_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">merged_dir</span><span class="p">,</span> <span class="n">output_file</span><span class="p">)</span>
         <span class="n">merged_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"All variables merged. Final file saved at: </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
@@ -7737,7 +7732,6 @@ No files found for variable (35) in the given year range.
         <span class="nb">print</span><span class="p">(</span><span class="s2">"No valid files found to merge or no variable columns detected."</span><span class="p">)</span>
 
 
-<span class="c1"># Run the merge</span>
 <span class="n">merge_all_variables</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -7762,7 +7756,7 @@ No files found for variable (35) in the given year range.
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [69]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [187]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">nasa_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"data/nasa/merged/all_variables_merged.csv"</span><span class="p">)</span>
@@ -7777,7 +7771,7 @@ No files found for variable (35) in the given year range.
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[69]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[187]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -7954,12 +7948,11 @@ No files found for variable (35) in the given year range.
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [70]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [188]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">missing_values_before</span> <span class="o">=</span> <span class="n">nasa_data</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 
-<span class="c1"># Display the updated missing values summary</span>
 <span class="n">missing_data_summary_before</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
     <span class="s2">"Missing Values"</span><span class="p">:</span> <span class="n">missing_values_before</span><span class="p">,</span>
     <span class="s2">"Percentage"</span><span class="p">:</span> <span class="p">(</span><span class="n">missing_values_before</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">nasa_data</span><span class="p">))</span> <span class="o">*</span> <span class="mi">100</span>
@@ -7976,7 +7969,7 @@ No files found for variable (35) in the given year range.
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[70]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[188]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -8038,23 +8031,24 @@ No files found for variable (35) in the given year range.
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [71]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [189]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Perform group-wise interpolation based on LAT and LON</span>
-<span class="n">nasa_data</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s2">"LAT"</span><span class="p">,</span> <span class="s2">"LON"</span><span class="p">,</span> <span class="s2">"YEAR"</span><span class="p">,</span> <span class="s2">"MO"</span><span class="p">,</span> <span class="s2">"DY"</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">nasa_data</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s2">"LAT"</span><span class="p">,</span> <span class="s2">"LON"</span><span class="p">,</span> <span class="s2">"YEAR"</span><span class="p">,</span> <span class="s2">"MO"</span><span class="p">,</span> <span class="s2">"DY"</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="c1"># Apply interpolation to fill missing values using neighboring LAT/LON data</span>
+
 <span class="n">nasa_data</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">"linear"</span><span class="p">,</span> <span class="n">limit_direction</span><span class="o">=</span><span class="s2">"both"</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="c1"># Check if there are still missing values</span>
+
 <span class="n">missing_values_after</span> <span class="o">=</span> <span class="n">nasa_data</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 
-<span class="c1"># Display the updated missing values summary</span>
-<span class="n">missing_data_summary_after</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-    <span class="s2">"Missing Values"</span><span class="p">:</span> <span class="n">missing_values_after</span><span class="p">,</span>
-    <span class="s2">"Percentage"</span><span class="p">:</span> <span class="p">(</span><span class="n">missing_values_after</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">nasa_data</span><span class="p">))</span> <span class="o">*</span> <span class="mi">100</span>
-<span class="p">})</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">"Missing Values"</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">missing_data_summary_after</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="s2">"Missing Values"</span><span class="p">:</span> <span class="n">missing_values_after</span><span class="p">,</span>
+        <span class="s2">"Percentage"</span><span class="p">:</span> <span class="p">(</span><span class="n">missing_values_after</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">nasa_data</span><span class="p">))</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">"Missing Values"</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="n">missing_data_summary_after</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
@@ -8067,7 +8061,7 @@ No files found for variable (35) in the given year range.
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[71]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[189]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -8129,6 +8123,1028 @@ No files found for variable (35) in the given year range.
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [190]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">nasa_data</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">"data/nasa/merged/all_variables_merged_interpolated.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">nasa_data</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[190]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>(67248, 39)</pre>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [191]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">nasa_data</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 67248 entries, 0 to 67247
+Data columns (total 39 columns):
+ #   Column               Non-Null Count  Dtype  
+---  ------               --------------  -----  
+ 0   LAT                  67248 non-null  float64
+ 1   LON                  67248 non-null  float64
+ 2   YEAR                 67248 non-null  int64  
+ 3   MO                   67248 non-null  int64  
+ 4   DY                   67248 non-null  int64  
+ 5   CLRSKY_SFC_SW_DWN_x  67248 non-null  float64
+ 6   ALLSKY_SFC_UV_INDEX  67248 non-null  float64
+ 7   ALLSKY_SFC_SW_DWN    67248 non-null  float64
+ 8   CLRSKY_SFC_SW_DWN_y  67248 non-null  float64
+ 9   WS2M                 67248 non-null  float64
+ 10  T2M                  67248 non-null  float64
+ 11  T2MDEW               67248 non-null  float64
+ 12  T2MWET               67248 non-null  float64
+ 13  TS                   67248 non-null  float64
+ 14  T2M_RANGE            67248 non-null  float64
+ 15  T2M_MAX              67248 non-null  float64
+ 16  ALLSKY_SFC_SW_DNI    67248 non-null  float64
+ 17  T2M_MIN              67248 non-null  float64
+ 18  QV2M                 67248 non-null  float64
+ 19  RH2M                 67248 non-null  float64
+ 20  PRECTOTCORR          67248 non-null  float64
+ 21  PS                   67248 non-null  float64
+ 22  WS10M                67248 non-null  float64
+ 23  WS10M_MAX            67248 non-null  float64
+ 24  WS10M_MIN            67248 non-null  float64
+ 25  WS10M_RANGE          67248 non-null  float64
+ 26  WD10M                67248 non-null  float64
+ 27  ALLSKY_SFC_SW_DIFF   67248 non-null  float64
+ 28  WS50M                67248 non-null  float64
+ 29  WS50M_MAX            67248 non-null  float64
+ 30  WS50M_MIN            67248 non-null  float64
+ 31  WS50M_RANGE          67248 non-null  float64
+ 32  WD50M                67248 non-null  float64
+ 33  ALLSKY_KT            67248 non-null  float64
+ 34  ALLSKY_SFC_LW_DWN    67248 non-null  float64
+ 35  ALLSKY_SFC_PAR_TOT   67248 non-null  float64
+ 36  CLRSKY_SFC_PAR_TOT   67248 non-null  float64
+ 37  ALLSKY_SFC_UVA       67248 non-null  float64
+ 38  ALLSKY_SFC_UVB       67248 non-null  float64
+dtypes: float64(36), int64(3)
+memory usage: 20.0 MB
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>I'll start by inspecting the dataset to understand its structure and completeness. Then, I'll prepare it for the <strong>Renewable Energy Consumption Tracker</strong> by applying necessary data cleaning, feature engineering, and transformations. Let me analyze the dataset first.</p>
+<h1 id="Key-Observations:">Key Observations:<a class="anchor-link" href="#Key-Observations:">¶</a></h1><ol>
+<li><p><strong>Missing Data Representation:</strong> The dataset uses <code>-999</code> as a placeholder for missing values instead of <code>NaN</code>. These need to be replaced for proper handling.</p>
+</li>
+<li><p><strong>Duplicate Columns:</strong> <code>CLRSKY_SFC_SW_DWN_x</code> and <code>CLRSKY_SFC_SW_DWN_y</code> appear to be duplicate variables.</p>
+</li>
+<li><p><strong>Latitude and Longitude Range Validation:</strong> Some latitude (LAT) and longitude (LON) values (e.g., 29.5°N, 34.0°E) are outside Palestine’s expected range (31°N-33°N, 34°E-36°E), requiring filtering.</p>
+</li>
+<li><p><strong>Outlier Detection Needed:</strong> Some columns may contain extreme values beyond physically reasonable limits.</p>
+</li>
+<li><p><strong>Key Variables for Renewable Energy:</strong></p>
+</li>
+</ol>
+<ul>
+<li><strong>Solar Energy Indicators:</strong> <code>ALLSKY_SFC_SW_DWN</code>, <code>CLRSKY_SFC_SW_DWN</code>, <code>ALLSKY_SFC_SW_DNI</code>, <code>ALLSKY_SFC_UV_INDEX</code>, <code>ALLSKY_SFC_PAR_TOT</code>, <code>CLRSKY_SFC_PAR_TOT</code></li>
+<li><strong>Wind Energy Indicators:</strong> <code>WS10M</code>, <code>WS10M_MAX</code>, <code>WS50M</code>, <code>WS50M_MAX</code></li>
+<li><strong>Weather Factors:</strong> <code>T2M (Temperature)</code>, <code>RH2M (Humidity)</code>, <code>PRECTOTCORR (Precipitation)</code></li>
+</ul>
+<h1 id="Next-Steps-in-Data-Preparation:">Next Steps in Data Preparation:<a class="anchor-link" href="#Next-Steps-in-Data-Preparation:">¶</a></h1><ul>
+<li><p>Replace <code>-999</code> values with <code>NaN</code> and handle missing values.</p>
+</li>
+<li><p>Remove duplicate and unnecessary columns.</p>
+</li>
+<li><p>Filter dataset to keep only valid LAT/LON values.</p>
+</li>
+<li><p>Detect and handle outliers using Z-score filtering.</p>
+</li>
+<li><p>Normalize/scale the relevant features for better model performance.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [192]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">nasa_data_copy</span> <span class="o">=</span> <span class="n">nasa_data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [193]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">nasa_data</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="o">-</span><span class="mf">999.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># calculate the sum of missing values in each row</span>
+<span class="c1"># nasa_data["missing_values"] = nasa_data.isnull().sum(axis=1)</span>
+<span class="c1"># nasa_data["missing_values"]</span>
+<span class="c1"># nasa_data.to_csv('outputs/exploring_outputs/nasa/missing_values.csv', index=False)</span>
+<span class="c1"># nasa_data.dropna(inplace=True)</span>
+
+<span class="c1"># show which columns have missing values</span>
+<span class="n">nasa_data</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="n">missing_cols</span> <span class="o">=</span> <span class="n">nasa_data</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">nasa_data</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">()]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">missing_cols</span>
+
+<span class="c1"># nasa_data.shape</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[193]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>['CLRSKY_SFC_SW_DWN_x',
+ 'ALLSKY_SFC_UV_INDEX',
+ 'ALLSKY_SFC_SW_DWN',
+ 'CLRSKY_SFC_SW_DWN_y',
+ 'ALLSKY_SFC_SW_DNI',
+ 'ALLSKY_SFC_SW_DIFF',
+ 'ALLSKY_KT',
+ 'ALLSKY_SFC_LW_DWN',
+ 'ALLSKY_SFC_PAR_TOT',
+ 'CLRSKY_SFC_PAR_TOT',
+ 'ALLSKY_SFC_UVA',
+ 'ALLSKY_SFC_UVB']</pre>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [194]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">nasa_with_missing</span> <span class="o">=</span> <span class="n">nasa_data</span><span class="p">[</span><span class="n">missing_cols</span><span class="p">]</span>
+<span class="n">nasa_with_missing</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[194]:</div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>CLRSKY_SFC_SW_DWN_x</th>
+<th>ALLSKY_SFC_UV_INDEX</th>
+<th>ALLSKY_SFC_SW_DWN</th>
+<th>CLRSKY_SFC_SW_DWN_y</th>
+<th>ALLSKY_SFC_SW_DNI</th>
+<th>ALLSKY_SFC_SW_DIFF</th>
+<th>ALLSKY_KT</th>
+<th>ALLSKY_SFC_LW_DWN</th>
+<th>ALLSKY_SFC_PAR_TOT</th>
+<th>CLRSKY_SFC_PAR_TOT</th>
+<th>ALLSKY_SFC_UVA</th>
+<th>ALLSKY_SFC_UVB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>count</th>
+<td>21811.000000</td>
+<td>56878.000000</td>
+<td>29836.000000</td>
+<td>21811.000000</td>
+<td>56878.000000</td>
+<td>56878.000000</td>
+<td>56878.000000</td>
+<td>29848.000000</td>
+<td>56878.000000</td>
+<td>56878.000000</td>
+<td>56878.000000</td>
+<td>56878.000000</td>
+</tr>
+<tr>
+<th>mean</th>
+<td>-162.576281</td>
+<td>-362.085272</td>
+<td>-241.094387</td>
+<td>-162.576281</td>
+<td>-360.574642</td>
+<td>-361.453416</td>
+<td>-362.339189</td>
+<td>-238.606430</td>
+<td>-361.588374</td>
+<td>-361.406369</td>
+<td>-362.560700</td>
+<td>-362.701798</td>
+</tr>
+<tr>
+<th>std</th>
+<td>290.894506</td>
+<td>332.139057</td>
+<td>323.085580</td>
+<td>290.894506</td>
+<td>333.317640</td>
+<td>332.292992</td>
+<td>331.853164</td>
+<td>323.618746</td>
+<td>332.415024</td>
+<td>332.486799</td>
+<td>331.742814</td>
+<td>331.646506</td>
+</tr>
+<tr>
+<th>min</th>
+<td>-998.451641</td>
+<td>-998.911806</td>
+<td>-998.452292</td>
+<td>-998.451641</td>
+<td>-998.911723</td>
+<td>-998.911705</td>
+<td>-998.911798</td>
+<td>-998.449787</td>
+<td>-998.911739</td>
+<td>-998.911711</td>
+<td>-998.911829</td>
+<td>-998.911843</td>
+</tr>
+<tr>
+<th>25%</th>
+<td>-250.963895</td>
+<td>-654.859061</td>
+<td>-487.755045</td>
+<td>-250.963895</td>
+<td>-654.396626</td>
+<td>-654.369783</td>
+<td>-654.834096</td>
+<td>-485.080834</td>
+<td>-654.602531</td>
+<td>-654.488901</td>
+<td>-654.957196</td>
+<td>-655.009707</td>
+</tr>
+<tr>
+<th>50%</th>
+<td>4.600000</td>
+<td>-310.783285</td>
+<td>2.010000</td>
+<td>4.600000</td>
+<td>-309.907235</td>
+<td>-309.810701</td>
+<td>-310.756395</td>
+<td>6.320000</td>
+<td>-310.280653</td>
+<td>-310.029337</td>
+<td>-311.000841</td>
+<td>-311.107571</td>
+</tr>
+<tr>
+<th>75%</th>
+<td>7.270000</td>
+<td>0.590000</td>
+<td>6.040000</td>
+<td>7.270000</td>
+<td>1.020000</td>
+<td>1.130000</td>
+<td>0.500000</td>
+<td>8.190000</td>
+<td>1.320000</td>
+<td>1.670000</td>
+<td>0.170000</td>
+<td>0.000000</td>
+</tr>
+<tr>
+<th>max</th>
+<td>9.120000</td>
+<td>3.860000</td>
+<td>9.090000</td>
+<td>9.120000</td>
+<td>11.770000</td>
+<td>4.510000</td>
+<td>0.810000</td>
+<td>10.770000</td>
+<td>3.950000</td>
+<td>3.950000</td>
+<td>0.530000</td>
+<td>0.020000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [195]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">nasa_data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"CLRSKY_SFC_SW_DWN_x"</span><span class="p">,</span> <span class="s2">"CLRSKY_SFC_SW_DWN_y"</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [196]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">nasa_data</span><span class="o">.</span><span class="n">duplicated</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[196]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>np.int64(0)</pre>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [197]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">palestine_lat_range</span> <span class="o">=</span> <span class="p">(</span><span class="mi">31</span><span class="p">,</span> <span class="mi">33</span><span class="p">)</span>
+<span class="n">palestine_lon_range</span> <span class="o">=</span> <span class="p">(</span><span class="mi">34</span><span class="p">,</span> <span class="mi">36</span><span class="p">)</span>
+
+<span class="n">nasa_data</span> <span class="o">=</span> <span class="n">nasa_data</span><span class="p">[</span>
+    <span class="p">(</span><span class="n">nasa_data</span><span class="p">[</span><span class="s2">"LAT"</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">palestine_lat_range</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">nasa_data</span><span class="p">[</span><span class="s2">"LAT"</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">palestine_lat_range</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&amp;</span>
+    <span class="p">(</span><span class="n">nasa_data</span><span class="p">[</span><span class="s2">"LON"</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">palestine_lon_range</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">nasa_data</span><span class="p">[</span><span class="s2">"LON"</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">palestine_lon_range</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [198]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">nasa_data</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">"linear"</span><span class="p">,</span> <span class="n">limit_direction</span><span class="o">=</span><span class="s2">"both"</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [199]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">numeric_cols</span> <span class="o">=</span> <span class="n">nasa_data</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="s2">"float64"</span><span class="p">,</span> <span class="s2">"int64"</span><span class="p">])</span><span class="o">.</span><span class="n">columns</span>
+<span class="n">z_scores</span> <span class="o">=</span> <span class="n">nasa_data</span><span class="p">[</span><span class="n">numeric_cols</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">zscore</span><span class="p">)</span>
+<span class="n">nasa_data</span> <span class="o">=</span> <span class="n">nasa_data</span><span class="p">[(</span><span class="n">z_scores</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>Normalize selected features for AI model input</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [200]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">scaling_cols</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">"ALLSKY_SFC_SW_DWN"</span><span class="p">,</span> <span class="s2">"ALLSKY_SFC_SW_DNI"</span><span class="p">,</span> <span class="s2">"ALLSKY_SFC_PAR_TOT"</span><span class="p">,</span> <span class="s2">"CLRSKY_SFC_PAR_TOT"</span><span class="p">,</span> 
+    <span class="s2">"WS10M"</span><span class="p">,</span> <span class="s2">"WS10M_MAX"</span><span class="p">,</span> <span class="s2">"WS50M"</span><span class="p">,</span> <span class="s2">"WS50M_MAX"</span><span class="p">,</span> <span class="s2">"T2M"</span><span class="p">,</span> <span class="s2">"RH2M"</span><span class="p">,</span> <span class="s2">"PRECTOTCORR"</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [201]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">nasa_data</span><span class="p">[</span><span class="n">scaling_cols</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">nasa_data</span><span class="p">[</span><span class="n">scaling_cols</span><span class="p">]</span> <span class="o">-</span> <span class="n">nasa_data</span><span class="p">[</span><span class="n">scaling_cols</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span>
+    <span class="n">nasa_data</span><span class="p">[</span><span class="n">scaling_cols</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">nasa_data</span><span class="p">[</span><span class="n">scaling_cols</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">nasa_data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[ ]:</div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>LAT</th>
+<th>LON</th>
+<th>YEAR</th>
+<th>MO</th>
+<th>DY</th>
+<th>ALLSKY_SFC_UV_INDEX</th>
+<th>ALLSKY_SFC_SW_DWN</th>
+<th>WS2M</th>
+<th>T2M</th>
+<th>T2MDEW</th>
+<th>...</th>
+<th>WS50M_MAX</th>
+<th>WS50M_MIN</th>
+<th>WS50M_RANGE</th>
+<th>WD50M</th>
+<th>ALLSKY_KT</th>
+<th>ALLSKY_SFC_LW_DWN</th>
+<th>ALLSKY_SFC_PAR_TOT</th>
+<th>CLRSKY_SFC_PAR_TOT</th>
+<th>ALLSKY_SFC_UVA</th>
+<th>ALLSKY_SFC_UVB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>26679</th>
+<td>31.0</td>
+<td>34.0</td>
+<td>2024</td>
+<td>1</td>
+<td>1</td>
+<td>-805.487729</td>
+<td>0.998908</td>
+<td>2.173356</td>
+<td>0.169202</td>
+<td>5.742810</td>
+<td>...</td>
+<td>0.415614</td>
+<td>2.13794</td>
+<td>3.609127</td>
+<td>276.118281</td>
+<td>-805.483856</td>
+<td>9.02</td>
+<td>0.193017</td>
+<td>0.193088</td>
+<td>-805.551620</td>
+<td>-805.582598</td>
+</tr>
+<tr>
+<th>26680</th>
+<td>31.0</td>
+<td>34.0</td>
+<td>2024</td>
+<td>1</td>
+<td>2</td>
+<td>-805.399528</td>
+<td>0.998908</td>
+<td>2.170068</td>
+<td>0.169490</td>
+<td>5.748431</td>
+<td>...</td>
+<td>0.415065</td>
+<td>2.13382</td>
+<td>3.607381</td>
+<td>276.154843</td>
+<td>-805.395654</td>
+<td>9.02</td>
+<td>0.193105</td>
+<td>0.193176</td>
+<td>-805.463449</td>
+<td>-805.494441</td>
+</tr>
+<tr>
+<th>26681</th>
+<td>31.0</td>
+<td>34.0</td>
+<td>2024</td>
+<td>1</td>
+<td>3</td>
+<td>-805.311327</td>
+<td>0.998908</td>
+<td>2.166780</td>
+<td>0.169777</td>
+<td>5.754052</td>
+<td>...</td>
+<td>0.414517</td>
+<td>2.12970</td>
+<td>3.605634</td>
+<td>276.191405</td>
+<td>-805.307451</td>
+<td>9.02</td>
+<td>0.193193</td>
+<td>0.193264</td>
+<td>-805.375277</td>
+<td>-805.406283</td>
+</tr>
+<tr>
+<th>26682</th>
+<td>31.0</td>
+<td>34.0</td>
+<td>2024</td>
+<td>1</td>
+<td>4</td>
+<td>-805.223127</td>
+<td>0.998908</td>
+<td>2.163492</td>
+<td>0.170065</td>
+<td>5.759673</td>
+<td>...</td>
+<td>0.413969</td>
+<td>2.12558</td>
+<td>3.603888</td>
+<td>276.227967</td>
+<td>-805.219249</td>
+<td>9.02</td>
+<td>0.193281</td>
+<td>0.193352</td>
+<td>-805.287106</td>
+<td>-805.318126</td>
+</tr>
+<tr>
+<th>26683</th>
+<td>31.0</td>
+<td>34.0</td>
+<td>2024</td>
+<td>1</td>
+<td>5</td>
+<td>-805.134926</td>
+<td>0.998908</td>
+<td>2.160205</td>
+<td>0.170352</td>
+<td>5.765293</td>
+<td>...</td>
+<td>0.413421</td>
+<td>2.12146</td>
+<td>3.602142</td>
+<td>276.264529</td>
+<td>-805.131047</td>
+<td>9.02</td>
+<td>0.193369</td>
+<td>0.193440</td>
+<td>-805.198934</td>
+<td>-805.229968</td>
+</tr>
+</tbody>
+</table>
+<p>5 rows × 37 columns</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># testing the cleaned data</span>
+<span class="n">nasa_data</span> <span class="o">=</span> 
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># if not exist</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s2">"outputs/exploring_outputs/nasa"</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">nasa_data</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">"outputs/exploring_outputs/nasa/nasa_interpolated_description.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">nasa_data</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[ ]:</div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>LAT</th>
+<th>LON</th>
+<th>YEAR</th>
+<th>MO</th>
+<th>DY</th>
+<th>ALLSKY_SFC_UV_INDEX</th>
+<th>ALLSKY_SFC_SW_DWN</th>
+<th>WS2M</th>
+<th>T2M</th>
+<th>T2MDEW</th>
+<th>...</th>
+<th>WS50M_MAX</th>
+<th>WS50M_MIN</th>
+<th>WS50M_RANGE</th>
+<th>WD50M</th>
+<th>ALLSKY_KT</th>
+<th>ALLSKY_SFC_LW_DWN</th>
+<th>ALLSKY_SFC_PAR_TOT</th>
+<th>CLRSKY_SFC_PAR_TOT</th>
+<th>ALLSKY_SFC_UVA</th>
+<th>ALLSKY_SFC_UVB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>count</th>
+<td>37707.000000</td>
+<td>37707.000000</td>
+<td>37707.000000</td>
+<td>37707.000000</td>
+<td>37707.000000</td>
+<td>37707.000000</td>
+<td>37707.000000</td>
+<td>37707.000000</td>
+<td>37707.000000</td>
+<td>37707.000000</td>
+<td>...</td>
+<td>37707.000000</td>
+<td>37707.000000</td>
+<td>37707.000000</td>
+<td>37707.000000</td>
+<td>37707.000000</td>
+<td>37707.000000</td>
+<td>37707.000000</td>
+<td>37707.000000</td>
+<td>37707.000000</td>
+<td>37707.000000</td>
+</tr>
+<tr>
+<th>mean</th>
+<td>31.999788</td>
+<td>35.005115</td>
+<td>2022.315618</td>
+<td>6.589493</td>
+<td>15.703875</td>
+<td>-277.343556</td>
+<td>0.806172</td>
+<td>2.231752</td>
+<td>0.468677</td>
+<td>11.591660</td>
+<td>...</td>
+<td>0.465749</td>
+<td>1.991964</td>
+<td>4.291551</td>
+<td>244.501711</td>
+<td>-278.098329</td>
+<td>-184.035500</td>
+<td>0.719986</td>
+<td>0.720136</td>
+<td>-278.327074</td>
+<td>-278.535378</td>
+</tr>
+<tr>
+<th>std</th>
+<td>0.677827</td>
+<td>0.570273</td>
+<td>1.482342</td>
+<td>3.415190</td>
+<td>8.812858</td>
+<td>312.173032</td>
+<td>0.301020</td>
+<td>1.053655</td>
+<td>0.191388</td>
+<td>4.880578</td>
+<td>...</td>
+<td>0.137818</td>
+<td>1.207462</td>
+<td>1.394163</td>
+<td>88.332285</td>
+<td>311.493936</td>
+<td>303.939453</td>
+<td>0.311459</td>
+<td>0.311479</td>
+<td>311.407879</td>
+<td>311.274847</td>
+</tr>
+<tr>
+<th>min</th>
+<td>31.000000</td>
+<td>34.000000</td>
+<td>2020.000000</td>
+<td>1.000000</td>
+<td>1.000000</td>
+<td>-998.911806</td>
+<td>0.000000</td>
+<td>0.280000</td>
+<td>0.000000</td>
+<td>-3.660000</td>
+<td>...</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.830000</td>
+<td>0.000000</td>
+<td>-998.911798</td>
+<td>-998.449229</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>-998.911829</td>
+<td>-998.911843</td>
+</tr>
+<tr>
+<th>25%</th>
+<td>31.500000</td>
+<td>34.375000</td>
+<td>2021.000000</td>
+<td>4.000000</td>
+<td>8.000000</td>
+<td>-537.682549</td>
+<td>0.652595</td>
+<td>1.510000</td>
+<td>0.303500</td>
+<td>8.183320</td>
+<td>...</td>
+<td>0.361752</td>
+<td>1.090000</td>
+<td>3.303811</td>
+<td>220.400000</td>
+<td>-537.657161</td>
+<td>-338.618611</td>
+<td>0.460263</td>
+<td>0.460424</td>
+<td>-537.821018</td>
+<td>-537.892561</td>
+</tr>
+<tr>
+<th>50%</th>
+<td>32.000000</td>
+<td>35.000000</td>
+<td>2022.000000</td>
+<td>7.000000</td>
+<td>16.000000</td>
+<td>-152.097160</td>
+<td>0.994842</td>
+<td>2.116772</td>
+<td>0.413752</td>
+<td>10.140744</td>
+<td>...</td>
+<td>0.453271</td>
+<td>1.790000</td>
+<td>4.090000</td>
+<td>273.381729</td>
+<td>-152.168416</td>
+<td>7.870000</td>
+<td>0.844944</td>
+<td>0.845256</td>
+<td>-152.464952</td>
+<td>-152.600512</td>
+</tr>
+<tr>
+<th>75%</th>
+<td>32.500000</td>
+<td>35.625000</td>
+<td>2024.000000</td>
+<td>10.000000</td>
+<td>23.000000</td>
+<td>2.780000</td>
+<td>0.998081</td>
+<td>2.740000</td>
+<td>0.649477</td>
+<td>14.990000</td>
+<td>...</td>
+<td>0.553068</td>
+<td>2.700000</td>
+<td>5.170000</td>
+<td>303.009335</td>
+<td>0.730000</td>
+<td>8.706506</td>
+<td>0.999681</td>
+<td>0.999691</td>
+<td>0.460000</td>
+<td>0.010000</td>
+</tr>
+<tr>
+<th>max</th>
+<td>33.000000</td>
+<td>36.000000</td>
+<td>2024.000000</td>
+<td>12.000000</td>
+<td>31.000000</td>
+<td>3.610000</td>
+<td>1.000000</td>
+<td>6.110000</td>
+<td>1.000000</td>
+<td>24.330000</td>
+<td>...</td>
+<td>1.000000</td>
+<td>6.500000</td>
+<td>9.130000</td>
+<td>360.000000</td>
+<td>0.790000</td>
+<td>10.770000</td>
+<td>1.000000</td>
+<td>1.000000</td>
+<td>0.510000</td>
+<td>0.020000</td>
+</tr>
+</tbody>
+</table>
+<p>8 rows × 37 columns</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>The dataset has been cleaned and prepared for the <strong><code>Renewable Energy Consumption Tracker</code></strong>. Key steps taken:</p>
+<p>✅ Handled Missing Values: Replaced -999 with NaN and applied interpolation.</p>
+<p>✅ Removed Duplicates: Dropped redundant columns.</p>
+<p>✅ Filtered by Location: Kept only valid latitude/longitude values for Palestine.</p>
+<p>✅ Outlier Detection &amp; Removal: Used Z-score filtering to remove extreme values.</p>
+<p>✅ Feature Normalization: Scaled key variables for AI model compatibility.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s2">"outputs/preprocessed_data"</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">nasa_data</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">"outputs/preprocessed_data/nasa_data_cleaned.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
@@ -8152,7 +9168,7 @@ to either always raise an exception or to use a different default year (TBD).
 To avoid trouble, add a specific year to the input &amp; format.
 See https://github.com/python/cpython/issues/70647.
 [NbConvertApp] Converting notebook nasa_dataset_inspection.ipynb to script
-[NbConvertApp] Writing 5154 bytes to outputs\scripts\nasa_dataset_inspection.py
+[NbConvertApp] Writing 8977 bytes to outputs\scripts\nasa_dataset_inspection.py
 </pre>
 </div>
 </div>

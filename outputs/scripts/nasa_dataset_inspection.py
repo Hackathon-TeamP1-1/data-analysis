@@ -1,14 +1,16 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[63]:
+# In[181]:
 
 
 import os
 import pandas as pd
+import numpy as np
+from scipy.stats import zscore
 
 
-# In[64]:
+# In[182]:
 
 
 base_path = 'data/nasa'
@@ -16,7 +18,7 @@ starting_year = 2020
 ending_year = 2025
 
 
-# In[65]:
+# In[183]:
 
 
 all_subdirs = [
@@ -32,14 +34,14 @@ for d in all_subdirs:
 year_dirs.sort()
 
 
-# In[66]:
+# In[184]:
 
 
 merged_dir = os.path.join(base_path, 'merged')
 os.makedirs(merged_dir, exist_ok=True)
 
 
-# In[67]:
+# In[185]:
 
 
 for var_num in range(1, 36):
@@ -67,7 +69,7 @@ for var_num in range(1, 36):
         print(f"No files found for variable ({var_num}) in the given year range.")
 
 
-# In[68]:
+# In[186]:
 
 
 def merge_all_variables(
@@ -88,14 +90,12 @@ def merge_all_variables(
 
     key_cols = ["LAT", "LON", "YEAR", "MO", "DY"]
 
-    # List all "POWER_Regional_Daily_Merged" CSV files in the directory
     all_files = [
         f
         for f in os.listdir(merged_dir)
         if f.startswith("POWER_Regional_Daily_Merged") and f.endswith(".csv")
     ]
 
-    # Sort file names just for consistency (optional)
     all_files.sort()
 
     merged_df = None
@@ -103,33 +103,28 @@ def merge_all_variables(
     for csv_file in all_files:
         file_path = os.path.join(merged_dir, csv_file)
 
-        # Read the CSV
         df = pd.read_csv(file_path)
 
-        # Identify the variable column(s)
         var_cols = [c for c in df.columns if c not in key_cols]
 
-        # If there's exactly 1 variable column, we proceed
         if len(var_cols) == 1:
-            var_name = var_cols[0]  # e.g. "CLRSKY_SFC_SW_DWN" or "ALLSKY_SFC_SW_DNI"
+            var_name = var_cols[0]
 
             if merged_df is None:
-                # First file becomes the base DataFrame
+
                 merged_df = df
             else:
-                # Outer merge so we keep all rows from both DataFrames
+
                 merged_df = pd.merge(merged_df, df, on=key_cols, how="outer")
         else:
             print(
                 f"Warning: {csv_file} has {len(var_cols)} variable columns; skipping."
             )
 
-    # Final sorting by the key columns
     if merged_df is not None:
         merged_df.sort_values(by=key_cols, inplace=True)
         merged_df.reset_index(drop=True, inplace=True)
 
-        # Write to CSV
         output_path = os.path.join(merged_dir, output_file)
         merged_df.to_csv(output_path, index=False)
         print(f"All variables merged. Final file saved at: {output_path}")
@@ -137,23 +132,21 @@ def merge_all_variables(
         print("No valid files found to merge or no variable columns detected.")
 
 
-# Run the merge
 merge_all_variables()
 
 
-# In[69]:
+# In[187]:
 
 
 nasa_data = pd.read_csv("data/nasa/merged/all_variables_merged.csv")
 nasa_data.head()
 
 
-# In[70]:
+# In[188]:
 
 
 missing_values_before = nasa_data.isnull().sum()
 
-# Display the updated missing values summary
 missing_data_summary_before = pd.DataFrame({
     "Missing Values": missing_values_before,
     "Percentage": (missing_values_before / len(nasa_data)) * 100
@@ -162,25 +155,199 @@ missing_data_summary_before = pd.DataFrame({
 missing_data_summary_before.head()
 
 
-# In[71]:
+# In[189]:
 
 
-# Perform group-wise interpolation based on LAT and LON
 nasa_data.sort_values(by=["LAT", "LON", "YEAR", "MO", "DY"], inplace=True)
 
-# Apply interpolation to fill missing values using neighboring LAT/LON data
+
 nasa_data.interpolate(method="linear", limit_direction="both", inplace=True)
 
-# Check if there are still missing values
+
 missing_values_after = nasa_data.isnull().sum()
 
-# Display the updated missing values summary
-missing_data_summary_after = pd.DataFrame({
-    "Missing Values": missing_values_after,
-    "Percentage": (missing_values_after / len(nasa_data)) * 100
-}).sort_values(by="Missing Values", ascending=False)
+
+missing_data_summary_after = pd.DataFrame(
+    {
+        "Missing Values": missing_values_after,
+        "Percentage": (missing_values_after / len(nasa_data)) * 100,
+    }
+).sort_values(by="Missing Values", ascending=False)
 
 missing_data_summary_after.head()
+
+
+# In[190]:
+
+
+nasa_data.to_csv("data/nasa/merged/all_variables_merged_interpolated.csv", index=False)
+nasa_data.shape
+
+
+# In[191]:
+
+
+nasa_data.info()
+
+
+# I'll start by inspecting the dataset to understand its structure and completeness. Then, I'll prepare it for the **Renewable Energy Consumption Tracker** by applying necessary data cleaning, feature engineering, and transformations. Let me analyze the dataset first.
+# 
+# # Key Observations:
+# 1. **Missing Data Representation:** The dataset uses `-999` as a placeholder for missing values instead of `NaN`. These need to be replaced for proper handling.
+# 
+# 2. **Duplicate Columns:** `CLRSKY_SFC_SW_DWN_x` and `CLRSKY_SFC_SW_DWN_y` appear to be duplicate variables.
+# 
+# 3. **Latitude and Longitude Range Validation:** Some latitude (LAT) and longitude (LON) values (e.g., 29.5°N, 34.0°E) are outside Palestine’s expected range (31°N-33°N, 34°E-36°E), requiring filtering.
+# 
+# 4. **Outlier Detection Needed:** Some columns may contain extreme values beyond physically reasonable limits.
+# 
+# 5. **Key Variables for Renewable Energy:**
+# - **Solar Energy Indicators:** `ALLSKY_SFC_SW_DWN`, `CLRSKY_SFC_SW_DWN`, `ALLSKY_SFC_SW_DNI`, `ALLSKY_SFC_UV_INDEX`, `ALLSKY_SFC_PAR_TOT`, `CLRSKY_SFC_PAR_TOT`
+# - **Wind Energy Indicators:** `WS10M`, `WS10M_MAX`, `WS50M`, `WS50M_MAX`
+# - **Weather Factors:** `T2M (Temperature)`, `RH2M (Humidity)`, `PRECTOTCORR (Precipitation)`
+# 
+# # Next Steps in Data Preparation:
+# 
+# - Replace `-999` values with `NaN` and handle missing values.
+# 
+# - Remove duplicate and unnecessary columns.
+# 
+# - Filter dataset to keep only valid LAT/LON values.
+# 
+# - Detect and handle outliers using Z-score filtering.
+# 
+# - Normalize/scale the relevant features for better model performance.
+# 
+
+# In[192]:
+
+
+nasa_data_copy = nasa_data.copy()
+
+
+# In[193]:
+
+
+nasa_data.replace(-999.0, np.nan, inplace=True)
+
+# calculate the sum of missing values in each row
+# nasa_data["missing_values"] = nasa_data.isnull().sum(axis=1)
+# nasa_data["missing_values"]
+# nasa_data.to_csv('outputs/exploring_outputs/nasa/missing_values.csv', index=False)
+# nasa_data.dropna(inplace=True)
+
+# show which columns have missing values
+nasa_data.isnull().sum()
+missing_cols = nasa_data.columns[nasa_data.isnull().any()].tolist()
+missing_cols
+
+# nasa_data.shape
+
+
+# In[194]:
+
+
+nasa_with_missing = nasa_data[missing_cols]
+nasa_with_missing.describe()
+
+
+# In[195]:
+
+
+nasa_data.drop(columns=["CLRSKY_SFC_SW_DWN_x", "CLRSKY_SFC_SW_DWN_y"], inplace=True)
+
+
+# In[196]:
+
+
+nasa_data.duplicated().sum()
+
+
+# In[197]:
+
+
+palestine_lat_range = (31, 33)
+palestine_lon_range = (34, 36)
+
+nasa_data = nasa_data[
+    (nasa_data["LAT"] >= palestine_lat_range[0]) & (nasa_data["LAT"] <= palestine_lat_range[1]) &
+    (nasa_data["LON"] >= palestine_lon_range[0]) & (nasa_data["LON"] <= palestine_lon_range[1])
+]
+
+
+# In[198]:
+
+
+nasa_data.interpolate(method="linear", limit_direction="both", inplace=True)
+
+
+# In[199]:
+
+
+numeric_cols = nasa_data.select_dtypes(include=["float64", "int64"]).columns
+z_scores = nasa_data[numeric_cols].apply(zscore)
+nasa_data = nasa_data[(z_scores.abs() <= 3).all(axis=1)]
+
+
+# Normalize selected features for AI model input
+
+# In[200]:
+
+
+scaling_cols = [
+    "ALLSKY_SFC_SW_DWN", "ALLSKY_SFC_SW_DNI", "ALLSKY_SFC_PAR_TOT", "CLRSKY_SFC_PAR_TOT", 
+    "WS10M", "WS10M_MAX", "WS50M", "WS50M_MAX", "T2M", "RH2M", "PRECTOTCORR"
+]
+
+
+# In[201]:
+
+
+nasa_data[scaling_cols] = (nasa_data[scaling_cols] - nasa_data[scaling_cols].min()) / (
+    nasa_data[scaling_cols].max() - nasa_data[scaling_cols].min()
+)
+
+
+# In[ ]:
+
+
+nasa_data.head()
+
+
+# In[ ]:
+
+
+# testing the cleaned data
+nasa_data = 
+
+
+# In[ ]:
+
+
+# if not exist
+os.makedirs("outputs/exploring_outputs/nasa", exist_ok=True)
+nasa_data.describe().to_csv("outputs/exploring_outputs/nasa/nasa_interpolated_description.csv", index=False)
+nasa_data.describe()
+
+
+# The dataset has been cleaned and prepared for the **`Renewable Energy Consumption Tracker`**. Key steps taken:
+# 
+# ✅ Handled Missing Values: Replaced -999 with NaN and applied interpolation.
+# 
+# ✅ Removed Duplicates: Dropped redundant columns.
+# 
+# ✅ Filtered by Location: Kept only valid latitude/longitude values for Palestine.
+# 
+# ✅ Outlier Detection & Removal: Used Z-score filtering to remove extreme values.
+# 
+# ✅ Feature Normalization: Scaled key variables for AI model compatibility.
+# 
+
+# In[ ]:
+
+
+os.makedirs("outputs/preprocessed_data", exist_ok=True)
+nasa_data.to_csv("outputs/preprocessed_data/nasa_data_cleaned.csv", index=False)
 
 
 # In[ ]:
