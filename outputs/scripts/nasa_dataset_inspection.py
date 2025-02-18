@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[181]:
+# In[121]:
 
 
 import os
@@ -10,7 +10,7 @@ import numpy as np
 from scipy.stats import zscore
 
 
-# In[182]:
+# In[122]:
 
 
 base_path = 'data/nasa'
@@ -18,7 +18,7 @@ starting_year = 2020
 ending_year = 2025
 
 
-# In[183]:
+# In[123]:
 
 
 all_subdirs = [
@@ -34,14 +34,14 @@ for d in all_subdirs:
 year_dirs.sort()
 
 
-# In[184]:
+# In[124]:
 
 
 merged_dir = os.path.join(base_path, 'merged')
 os.makedirs(merged_dir, exist_ok=True)
 
 
-# In[185]:
+# In[125]:
 
 
 for var_num in range(1, 36):
@@ -69,7 +69,7 @@ for var_num in range(1, 36):
         print(f"No files found for variable ({var_num}) in the given year range.")
 
 
-# In[186]:
+# In[126]:
 
 
 def merge_all_variables(
@@ -135,14 +135,14 @@ def merge_all_variables(
 merge_all_variables()
 
 
-# In[187]:
+# In[127]:
 
 
 nasa_data = pd.read_csv("data/nasa/merged/all_variables_merged.csv")
 nasa_data.head()
 
 
-# In[188]:
+# In[128]:
 
 
 missing_values_before = nasa_data.isnull().sum()
@@ -155,13 +155,13 @@ missing_data_summary_before = pd.DataFrame({
 missing_data_summary_before.head()
 
 
-# In[189]:
+# In[129]:
 
 
 nasa_data.sort_values(by=["LAT", "LON", "YEAR", "MO", "DY"], inplace=True)
 
 
-nasa_data.interpolate(method="linear", limit_direction="both", inplace=True)
+# nasa_data.interpolate(method="linear", limit_direction="both", inplace=True)
 
 
 missing_values_after = nasa_data.isnull().sum()
@@ -177,17 +177,17 @@ missing_data_summary_after = pd.DataFrame(
 missing_data_summary_after.head()
 
 
-# In[190]:
+# In[130]:
 
 
-nasa_data.to_csv("data/nasa/merged/all_variables_merged_interpolated.csv", index=False)
-nasa_data.shape
+# nasa_data.to_csv("data/nasa/merged/all_variables_merged_interpolated.csv", index=False)
+# nasa_data.shape
 
 
-# In[191]:
+# In[131]:
 
 
-nasa_data.info()
+# nasa_data.info()
 
 
 # I'll start by inspecting the dataset to understand its structure and completeness. Then, I'll prepare it for the **Renewable Energy Consumption Tracker** by applying necessary data cleaning, feature engineering, and transformations. Let me analyze the dataset first.
@@ -219,13 +219,13 @@ nasa_data.info()
 # - Normalize/scale the relevant features for better model performance.
 # 
 
-# In[192]:
+# In[132]:
 
 
 nasa_data_copy = nasa_data.copy()
 
 
-# In[193]:
+# In[133]:
 
 
 nasa_data.replace(-999.0, np.nan, inplace=True)
@@ -244,26 +244,20 @@ missing_cols
 # nasa_data.shape
 
 
-# In[194]:
+# In[134]:
 
 
 nasa_with_missing = nasa_data[missing_cols]
 nasa_with_missing.describe()
 
 
-# In[195]:
+# In[135]:
 
 
 nasa_data.drop(columns=["CLRSKY_SFC_SW_DWN_x", "CLRSKY_SFC_SW_DWN_y"], inplace=True)
 
 
-# In[196]:
-
-
-nasa_data.duplicated().sum()
-
-
-# In[197]:
+# In[136]:
 
 
 palestine_lat_range = (31, 33)
@@ -275,23 +269,36 @@ nasa_data = nasa_data[
 ]
 
 
-# In[198]:
+# In[137]:
+
+
+missing_after_filtering = nasa_data.isnull().sum()
+missing_after_filtering[missing_after_filtering > 0]
+
+
+# In[138]:
 
 
 nasa_data.interpolate(method="linear", limit_direction="both", inplace=True)
+# nasa_data.fillna(method="bfill", inplace=True)
+# nasa_data.fillna(method="ffill", inplace=True)
+nasa_data.to_csv("data/nasa/merged/all_variables_merged_interpolated.csv", index=False)
+missing_after_filtering = nasa_data.isnull().sum()
+missing_after_filtering[missing_after_filtering > 0]
 
 
-# In[199]:
+# In[139]:
 
 
 numeric_cols = nasa_data.select_dtypes(include=["float64", "int64"]).columns
 z_scores = nasa_data[numeric_cols].apply(zscore)
 nasa_data = nasa_data[(z_scores.abs() <= 3).all(axis=1)]
+nasa_data.isnull().sum().sum()
 
 
 # Normalize selected features for AI model input
 
-# In[200]:
+# In[140]:
 
 
 scaling_cols = [
@@ -300,7 +307,7 @@ scaling_cols = [
 ]
 
 
-# In[201]:
+# In[141]:
 
 
 nasa_data[scaling_cols] = (nasa_data[scaling_cols] - nasa_data[scaling_cols].min()) / (
@@ -308,20 +315,29 @@ nasa_data[scaling_cols] = (nasa_data[scaling_cols] - nasa_data[scaling_cols].min
 )
 
 
-# In[ ]:
+# In[142]:
+
+
+missing_values_after = nasa_data.isnull().sum()
+
+
+missing_data_summary_after = pd.DataFrame(
+    {
+        "Missing Values": missing_values_after,
+        "Percentage": (missing_values_after / len(nasa_data)) * 100,
+    }
+).sort_values(by="Missing Values", ascending=False)
+
+missing_data_summary_after.head()
+
+
+# In[143]:
 
 
 nasa_data.head()
 
 
-# In[ ]:
-
-
-# testing the cleaned data
-nasa_data = 
-
-
-# In[ ]:
+# In[144]:
 
 
 # if not exist
@@ -343,7 +359,7 @@ nasa_data.describe()
 # ✅ Feature Normalization: Scaled key variables for AI model compatibility.
 # 
 
-# In[ ]:
+# In[145]:
 
 
 os.makedirs("outputs/preprocessed_data", exist_ok=True)
