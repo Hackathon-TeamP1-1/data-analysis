@@ -56,7 +56,7 @@
 # 
 # - What features should be included in the dashboard to allow users to explore data dynamically?
 
-# In[282]:
+# In[1]:
 
 
 # the goal is the analyze the data and find the best way to predict the Strategy for AI-Powered Renewable Energy Consumption & Forecasting Dashboard
@@ -70,7 +70,7 @@ import plotly.express as px
 # ## Datasets Loading
 # ### 1. Our World in Data (OWID) - Global Energy Dataset
 
-# In[283]:
+# In[2]:
 
 
 # loading the datasets
@@ -84,13 +84,13 @@ print(
 )
 
 
-# In[284]:
+# In[3]:
 
 
 owid_data.head()
 
 
-# In[285]:
+# In[4]:
 
 
 owid_data.sample(10)
@@ -98,7 +98,7 @@ owid_data.sample(10)
 
 # ### 2. Global Energy Consumption & Renewable Generation || Kaggle
 
-# In[286]:
+# In[5]:
 
 
 # global energy data
@@ -128,43 +128,43 @@ print(
 )
 
 
-# In[287]:
+# In[6]:
 
 
 continent_consumption.head()
 
 
-# In[288]:
+# In[7]:
 
 
 country_consumption.head()
 
 
-# In[289]:
+# In[8]:
 
 
 country_consumption.head()
 
 
-# In[290]:
+# In[9]:
 
 
 non_renewable_total_power_generation.head()
 
 
-# In[291]:
+# In[10]:
 
 
 renewable_power_generation_97_17.head()
 
 
-# In[292]:
+# In[11]:
 
 
 renewable_total_power_generation.head()
 
 
-# In[293]:
+# In[12]:
 
 
 top_20_countries_power_generatoin.head()
@@ -172,7 +172,7 @@ top_20_countries_power_generatoin.head()
 
 # ### Energy Generation & Consumption (from multiple sources)
 
-# In[294]:
+# In[13]:
 
 
 electricity_consumption_statistics = pd.read_csv('data/IRR_cleaned/ELECSTAT_CLEANED.csv')
@@ -188,25 +188,25 @@ print(
 )
 
 
-# In[295]:
+# In[14]:
 
 
 electricity_consumption_statistics.head()
 
 
-# In[296]:
+# In[15]:
 
 
 heat_generations.head()
 
 
-# In[297]:
+# In[16]:
 
 
 share_of_renewables.head()
 
 
-# In[298]:
+# In[17]:
 
 
 investment_in_energy_infrastructure.head()
@@ -224,19 +224,19 @@ investment_in_energy_infrastructure.head()
 # 
 # - **owid-energy-codebook.csv**: A codebook detailing column descriptions and data sources for the OWID dataset.
 
-# In[299]:
+# In[18]:
 
 
 owid_data.columns
 
 
-# In[300]:
+# In[19]:
 
 
 owid_bookcode.columns
 
 
-# In[301]:
+# In[20]:
 
 
 # save the output on a text file
@@ -248,7 +248,7 @@ owid_data.describe()
 # 
 # After Reviewing the bookcode CSV, I can benefit from the "column" and the "units" columns through my programatically exploring into this dataset.
 
-# In[302]:
+# In[21]:
 
 
 owid_bookcode = owid_bookcode[['column', 'unit']]
@@ -256,7 +256,7 @@ owid_bookcode.dropna(inplace=True)
 owid_bookcode.head()
 
 
-# In[303]:
+# In[22]:
 
 
 owid_info_df = pd.DataFrame(owid_data.dtypes, columns=['data_type']).reset_index()
@@ -265,13 +265,13 @@ owid_info_df.to_csv('outputs/exploring_outputs/owid/owid_info.csv')
 # owid_info_df['missing_values'] = owid_data.isnull().sum()
 
 
-# In[304]:
+# In[23]:
 
 
 owid_data.value_counts().to_csv('outputs/exploring_outputs/owid/owid_data_value_counts.csv')   
 
 
-# In[305]:
+# In[24]:
 
 
 missing_df = owid_data.isnull().sum().reset_index()
@@ -282,7 +282,7 @@ missing_df.sort_values('missing_percentage', ascending=False, inplace=True)
 missing_df.to_csv('outputs/exploring_outputs/owid/owid_data_missing.csv')
 
 
-# In[306]:
+# In[25]:
 
 
 def basic_info(df, name):
@@ -294,19 +294,46 @@ def basic_info(df, name):
     print(df.describe(include='all'))
 
 
-# In[307]:
+# In[26]:
 
 
 basic_info(owid_data, "Energy Data")
 
 
-# In[308]:
+# In[27]:
 
 
-display(owid_data.head())
+# Step 1: Drop columns with more than 85% missing values
+threshold = 85  # Percentage threshold for dropping columns
+columns_to_drop = missing_df[missing_df["missing_percentage"] > threshold]["column"].tolist()
+owid_data_cleaned = owid_data.drop(columns=columns_to_drop)
+
+# Step 2: Fill missing values for population and GDP using interpolation
+owid_data_cleaned["population"] = owid_data_cleaned["population"].interpolate(method="linear")
+owid_data_cleaned["gdp"] = owid_data_cleaned["gdp"].interpolate(method="linear")
+
+# Step 3: Convert data types where necessary
+# Ensure 'year' is integer and 'population' & 'gdp' are floats
+owid_data_cleaned["year"] = owid_data_cleaned["year"].astype(int)
+owid_data_cleaned["population"] = owid_data_cleaned["population"].astype(float)
+owid_data_cleaned["gdp"] = owid_data_cleaned["gdp"].astype(float)
+
+# Step 4: Remove non-country entities (if needed)
+# Checking unique values in the 'country' column
+unique_countries = owid_data_cleaned["country"].unique()
+
+# Removing entities that do not represent countries (assumed they contain parentheses)
+owid_data_cleaned = owid_data_cleaned[~owid_data_cleaned["country"].str.contains(r"\(|\)", regex=True)]
+
+# Save cleaned dataset for further analysis
+cleaned_data_path = "/mnt/data/owid-energy-data-cleaned.csv"
+owid_data_cleaned.to_csv(cleaned_data_path, index=False)
+
+# Display the cleaned dataset for review
+tools.display_dataframe_to_user(name="Cleaned OWID Energy Data", dataframe=owid_data_cleaned)
 
 
-# In[309]:
+# In[ ]:
 
 
 def plot_energy_trends(df, energy_source):
@@ -408,7 +435,7 @@ def plot_energy_sources_by_income_group(df, income_group):
     )
 
 
-# In[310]:
+# In[ ]:
 
 
 energy_columns = [col for col in owid_data.columns if any(x in col for x in ['energy', 'electricity', 'consumption', 'production'])]
@@ -416,7 +443,7 @@ print("Available energy-related columns:")
 print(energy_columns)
 
 
-# In[311]:
+# In[ ]:
 
 
 for col in energy_columns:
@@ -425,7 +452,7 @@ for col in energy_columns:
         
 
 
-# In[312]:
+# In[ ]:
 
 
 def plot_energy_distribution(df, energy_source):
@@ -440,7 +467,7 @@ def plot_energy_distribution(df, energy_source):
     )
 
 
-# In[313]:
+# In[ ]:
 
 
 plot_energy_distribution(owid_data, "renewables_consumption")
@@ -474,11 +501,80 @@ plot_energy_distribution(owid_data, "renewables_consumption")
 # Based on the project requirements, we can determine how each dataset fits into the forecasting and visualization strategy:
 
 # ## A. Forecasting Future Renewable Energy Trends (5-10 years)
+# 
+# - **Suitable Datasets:**
+# 
+#     - owid-energy-data.csv (comprehensive energy trends over time)
+#     - renewablePowerGeneration97-17.csv (historical renewable energy production trends)
+#     - Country_Consumption_TWH.csv (energy consumption trends per country)
+#     - Continent_Consumption_TWH.csv (continental energy consumption)
+# 
+# - **Potential Models:**
+# 
+#     - ARIMA (for univariate time series forecasting)
+#     - Facebook Prophet (for trend prediction with seasonality)
+#     - LSTM (Long Short-Term Memory Networks) (for deep learning-based time series forecasting)
 
-# In[ ]:
+# ## B. Identifying Leading Countries in Renewable Energy Uptake
+# 
+# - **Suitable Datasets:**
+# 
+#     - top20CountriesPowerGeneration.csv (top renewable energy-producing countries)
+#     - RESHARE_CLEANED.csv (renewable share in total energy production)
+#     - Country_Consumption_TWH.csv (comparison of renewable vs. non-renewable consumption by country)
+# 
+# - **Visualization Strategy:**
+# 
+#     - Interactive heatmaps to show the most energy-progressive regions.
+#     - Bar charts comparing leading countries by energy type.
+
+# ## C. Modeling Investment Impact on Renewable Energy
+# - **Suitable Datasets:**
+#     - PUBFIN_CLEANED.csv (public investment in energy)
+#     - owid-energy-data.csv (historical energy production and cost trends)
+#     - renewablePowerGeneration97-17.csv (historical changes in renewable adoption)
+# - **Approach:**
+# 
+#     - Regression models to assess the correlation between investments and energy growth.
+
+# ## D. Evaluating Policy & Macroeconomic Factors
+# - **Suitable Datasets:**
+# 
+#     - owid-energy-data.csv (includes GDP, policy influences, and economic growth)
+#     - Country_Consumption_TWH.csv (energy needs per economy)
+#     - RESHARE_CLEANED.csv (renewable share impacted by policies)
+# 
+# - **Approach:**
+# 
+#     - Correlation analysis of GDP, policy initiatives, and renewable energy growth.
+
+# # E. Creating Interactive Visuals
+# 
+# - **Suitable Datasets:**
+# 
+#     - ELECSTAT_CLEANED.csv (electricity consumption trends)
+#     - owid-energy-data.csv (global insights)
+#     - renewablePowerGeneration97-17.csv (renewable breakdown)
+# 
+# - **Visualization Tools:**
+# 
+#     - Streamlit/Dash/Plotly for interactive graphs.
+#     - Choropleth Maps to showcase energy trends by region.
+#     - Time Series Line Charts for historical and forecasted trends.
+
+# electricity_consumption_statistics[]
+
+# In[40]:
 
 
+electricity_consumption_statistics[electricity_consumption_statistics['Grid_Connection'] == 'State of Palestine (the)'].to_csv('outputs/exploring_outputs/IRR/State_of_Palestine.csv')
+# electricity_consumption_statistics['Region_Tech_Desc'].value_counts()
 
+
+# In[29]:
+
+
+owid_data[owid_data['country'] == 'Palestine'].to_csv('outputs/exploring_outputs/owid_palestine.csv')
 
 
 # # Store the jupyter notebook
