@@ -105,10 +105,14 @@ callbacks = [
 ]
 
 
-# In[141]:
+# In[ ]:
 
 
-model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001), loss=Huber(), metrics=["mae"])
+model.compile(
+    optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),
+    loss="mse",
+    metrics=["mae"],
+)
 
 
 # In[142]:
