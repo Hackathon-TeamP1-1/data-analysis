@@ -1,24 +1,58 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[121]:
+# In[610]:
 
 
 import os
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
+from statsmodels.stats.multicomp import pairwise_tukeyhsd
+from statsmodels.stats.multicomp import MultiComparison
+from statsmodels.stats.multicomp import tukeyhsd
+from statsmodels.stats.multicomp import MultiComparison
+from statsmodels.stats.multicomp import pairwise_tukeyhsd
+from statsmodels.stats.multicomp import MultiComparison
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
+from statsmodels.stats.anova import anova_lm
+import scipy.stats as stats
+from scipy.stats import ttest_ind
+from scipy.stats import f_oneway
+from scipy.stats import ttest_rel
+from scipy.stats import wilcoxon
+from scipy.stats import kruskal
+from scipy.stats import friedmanchisquare
+from scipy.stats import mannwhitneyu
+from scipy.stats import levene
+from scipy.stats import shapiro
+from scipy.stats import normaltest
+from scipy.stats import anderson
+from scipy.stats import bartlett
+from scipy.stats import fligner
+from scipy.stats import mood
+from scipy.stats import ranksums
+from scipy.stats import kstest
+from scipy.stats import ks_2samp
+from scipy.stats import chisquare
+from scipy.stats import chi2_contingency
+from scipy.stats import chi2
 import numpy as np
 from scipy.stats import zscore
 
 
-# In[122]:
+# In[611]:
 
 
 base_path = 'data/nasa'
-starting_year = 2020
+starting_year = 2009
 ending_year = 2025
 
 
-# In[123]:
+# In[612]:
 
 
 all_subdirs = [
@@ -34,14 +68,14 @@ for d in all_subdirs:
 year_dirs.sort()
 
 
-# In[124]:
+# In[613]:
 
 
 merged_dir = os.path.join(base_path, 'merged')
 os.makedirs(merged_dir, exist_ok=True)
 
 
-# In[125]:
+# In[614]:
 
 
 for var_num in range(1, 36):
@@ -69,7 +103,7 @@ for var_num in range(1, 36):
         print(f"No files found for variable ({var_num}) in the given year range.")
 
 
-# In[126]:
+# In[615]:
 
 
 def merge_all_variables(
@@ -135,14 +169,14 @@ def merge_all_variables(
 merge_all_variables()
 
 
-# In[127]:
+# In[616]:
 
 
 nasa_data = pd.read_csv("data/nasa/merged/all_variables_merged.csv")
 nasa_data.head()
 
 
-# In[128]:
+# In[617]:
 
 
 missing_values_before = nasa_data.isnull().sum()
@@ -155,7 +189,7 @@ missing_data_summary_before = pd.DataFrame({
 missing_data_summary_before.head()
 
 
-# In[129]:
+# In[618]:
 
 
 nasa_data.sort_values(by=["LAT", "LON", "YEAR", "MO", "DY"], inplace=True)
@@ -177,14 +211,14 @@ missing_data_summary_after = pd.DataFrame(
 missing_data_summary_after.head()
 
 
-# In[130]:
+# In[619]:
 
 
 # nasa_data.to_csv("data/nasa/merged/all_variables_merged_interpolated.csv", index=False)
 # nasa_data.shape
 
 
-# In[131]:
+# In[620]:
 
 
 # nasa_data.info()
@@ -219,13 +253,13 @@ missing_data_summary_after.head()
 # - Normalize/scale the relevant features for better model performance.
 # 
 
-# In[132]:
+# In[621]:
 
 
 nasa_data_copy = nasa_data.copy()
 
 
-# In[133]:
+# In[622]:
 
 
 nasa_data.replace(-999.0, np.nan, inplace=True)
@@ -244,20 +278,20 @@ missing_cols
 # nasa_data.shape
 
 
-# In[134]:
+# In[623]:
 
 
 nasa_with_missing = nasa_data[missing_cols]
 nasa_with_missing.describe()
 
 
-# In[135]:
+# In[624]:
 
 
 nasa_data.drop(columns=["CLRSKY_SFC_SW_DWN_x", "CLRSKY_SFC_SW_DWN_y"], inplace=True)
 
 
-# In[136]:
+# In[625]:
 
 
 palestine_lat_range = (31, 33)
@@ -269,14 +303,14 @@ nasa_data = nasa_data[
 ]
 
 
-# In[137]:
+# In[626]:
 
 
 missing_after_filtering = nasa_data.isnull().sum()
 missing_after_filtering[missing_after_filtering > 0]
 
 
-# In[138]:
+# In[627]:
 
 
 nasa_data.interpolate(method="linear", limit_direction="both", inplace=True)
@@ -287,18 +321,56 @@ missing_after_filtering = nasa_data.isnull().sum()
 missing_after_filtering[missing_after_filtering > 0]
 
 
-# In[139]:
+# In[628]:
+
+
+# numeric_cols = nasa_data.select_dtypes(include=["float64", "int64"]).columns
+# z_scores = nasa_data[numeric_cols].apply(zscore)
+# nasa_data = nasa_data[(z_scores.abs() <= 3).all(axis=1)]
+# nasa_data.isnull().sum().sum()
+
+
+# In[629]:
 
 
 numeric_cols = nasa_data.select_dtypes(include=["float64", "int64"]).columns
-z_scores = nasa_data[numeric_cols].apply(zscore)
-nasa_data = nasa_data[(z_scores.abs() <= 3).all(axis=1)]
-nasa_data.isnull().sum().sum()
+features_to_adjust = [col for col in numeric_cols if col not in ["LON", "LAT"]]
+
+# Apply outlier treatment only to selected features
+for col in features_to_adjust:
+    lower_limit = nasa_data[col].quantile(0.05)
+    upper_limit = nasa_data[col].quantile(0.95)
+    nasa_data[col] = np.clip(nasa_data[col], lower_limit, upper_limit)
+
+
+# In[630]:
+
+
+print("Before:", nasa_data['LON'].min(), nasa_data['LON'].max())
+
+
+# In[631]:
+
+
+nasa_data["PRECTOTCORR"] = np.log1p(nasa_data["PRECTOTCORR"])  # log1p handles zero values safely
 
 
 # Normalize selected features for AI model input
 
-# In[140]:
+# In[632]:
+
+
+plt.figure(figsize=(15, 10))
+for i, feature in enumerate(["LAT", "LON", "ALLSKY_SFC_SW_DWN", "WS2M", "T2M", "RH2M", "PRECTOTCORR", 'T2M_MAX', 'T2M_MIN', "ALLSKY_KT", 'ALLSKY_SFC_PAR_TOT']):
+    plt.subplot(4, 3, i + 1)
+    sns.boxplot(y=nasa_data[feature])
+    plt.title(feature)
+
+plt.tight_layout()
+plt.show()
+
+
+# In[633]:
 
 
 scaling_cols = [
@@ -307,7 +379,7 @@ scaling_cols = [
 ]
 
 
-# In[141]:
+# In[634]:
 
 
 nasa_data[scaling_cols] = (nasa_data[scaling_cols] - nasa_data[scaling_cols].min()) / (
@@ -315,7 +387,7 @@ nasa_data[scaling_cols] = (nasa_data[scaling_cols] - nasa_data[scaling_cols].min
 )
 
 
-# In[142]:
+# In[635]:
 
 
 missing_values_after = nasa_data.isnull().sum()
@@ -331,13 +403,13 @@ missing_data_summary_after = pd.DataFrame(
 missing_data_summary_after.head()
 
 
-# In[143]:
+# In[636]:
 
 
 nasa_data.head()
 
 
-# In[144]:
+# In[637]:
 
 
 # if not exist
@@ -359,7 +431,89 @@ nasa_data.describe()
 # ✅ Feature Normalization: Scaled key variables for AI model compatibility.
 # 
 
-# In[145]:
+# In[638]:
+
+
+nasa_data.shape
+
+
+# In[639]:
+
+
+nasa_data.isnull().sum().sum()
+
+
+# In[640]:
+
+
+nasa_data.duplicated().sum()
+
+
+# In[641]:
+
+
+nasa_data.dtypes
+
+
+# Now the dataset is well-structured, free of missing values and duplicates, and correctly formatted for further analysis or machine learning models.
+
+# In[642]:
+
+
+corr_matrix = nasa_data.corr()
+
+plt.figure(figsize=(12, 8))
+sns.heatmap(corr_matrix, cmap="coolwarm", annot=False, linewidths=0.5)
+plt.title("Feature Correlation Heatmap")
+plt.show()
+
+
+# The correlation heatmap shows the relationships between different features, with a particular focus on their correlation with E_produced (if present). Below is an analysis of feature importance and how to optimize the model:
+# 
+# # Best Features for Training
+# Based on correlation with E_produced, the most relevant features should be:
+# 
+# 1. `ALLSKY_SFC_SW_DWN` (Solar radiation reaching the surface) → Strongest positive correlation
+# 2. `ALLSKY_KT` (Clear-sky transmittance) → Moderate correlation
+# 3. `ALLSKY_SFC_PAR_TOT` (Photosynthetically active radiation) → Useful for energy conversion
+# 4. `T2M` (Air Temperature) → Impacts solar panel efficiency
+# 5. `RH2M` (Relative Humidity) → Affects solar power generation
+# 6. `WS2M` (Wind Speed at 2m) → May impact dust accumulation and cooling effects
+# 7. `PRECTOTCORR` (Precipitation) → May reduce panel efficiency during rain
+# 8. `T2M_MAX` & `T2M_MIN` (Daily max/min temperature) → Temperature fluctuation affects efficiency
+# 
+# **Features to Consider Dropping:**
+# - `ALLSKY_SFC_UV_INDEX`, `ALLSKY_SFC_UVA`, `ALLSKY_SFC_UVB` → Less direct impact on solar panel energy output.
+# - `PS (Surface Pressure)` → Minimal effect on energy generation.
+# - `WS50M`, `WD50M (Wind at 50m)` → Might not contribute significantly to solar forecasting.
+
+# In[643]:
+
+
+plt.figure(figsize=(15, 10))
+for i, feature in enumerate(["LAT", "LON", "ALLSKY_SFC_SW_DWN", "WS2M", "T2M", "RH2M", "PRECTOTCORR", 'T2M_MAX', 'T2M_MIN', "ALLSKY_KT", 'ALLSKY_SFC_PAR_TOT']):
+    plt.subplot(4, 3, i + 1)
+    sns.boxplot(y=nasa_data[feature])
+    plt.title(feature)
+
+plt.tight_layout()
+plt.show()
+
+
+# In[644]:
+
+
+plt.figure(figsize=(15, 10))
+for i, feature in enumerate(["LAT", "LON", "ALLSKY_SFC_SW_DWN", "WS2M", "T2M", "RH2M", "PRECTOTCORR", 'T2M_MAX', 'T2M_MIN', "ALLSKY_KT", 'ALLSKY_SFC_PAR_TOT']):
+    plt.subplot(4, 3, i + 1)
+    sns.boxplot(y=nasa_data_cleaned_no_outliers[feature])
+    plt.title(feature)
+
+plt.tight_layout()
+plt.show()
+
+
+# In[645]:
 
 
 os.makedirs("outputs/preprocessed_data", exist_ok=True)
